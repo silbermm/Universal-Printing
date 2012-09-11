@@ -1,0 +1,9 @@
+target/
+.svn/
+cp.txt
+nbactions.xml
+application.conf
+.svn*
+.svn/*
+*/.svn
+*/.svn/*
