@@ -15,6 +15,7 @@ import silbersoft.uprint.ui.models.PrintViewListModel;
 import silbersoft.uprint.ui.models.PrinterListModel;
 import silbersoft.uprint.dao.PrinterDao;
 import silbersoft.uprint.dao.PrinterDaoImpl;
+import silbersoft.uprint.ui.models.AboutUsModel;
 
 /**
  *
@@ -44,6 +45,11 @@ public class AppContext {
     public Action cancelAction() {
         return new CancelButtonModel();
     }
+    
+    @Bean
+    public Action aboutAction() {
+        return new AboutUsModel();
+    }
 
     @Bean
     public PrintViewListModel printerListModel() {
@@ -64,6 +70,7 @@ public class AppContext {
         PrintView printFrame = new PrintViewImpl(config());
         printFrame.setPrintModel(printAction());
         printFrame.setCancelModel(cancelAction());
+        printFrame.setAboutModel(aboutAction());
         printFrame.setBuildingListModel(buildingListModel());
         printFrame.setPrinterListModel(printerListModel());
         return printFrame;

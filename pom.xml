@@ -14,6 +14,7 @@
     <name>ucprint2</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <buildNumber>${maven.build.timestamp}</buildNumber>
     </properties>
 
     <dependencies>

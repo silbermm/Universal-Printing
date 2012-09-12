@@ -179,6 +179,15 @@ public class PrintViewImpl implements PrintView {
         fileMenu.add(exitItem);
         menu.add(fileMenu);
         
+        //Help Menu
+        JMenu aboutMenu = new JMenu(R.getString("menu.about.title"));
+        aboutMenu.setMnemonic(KeyEvent.VK_H);
+        JMenuItem aboutUsItem = new JMenuItem(R.getString("menu.about.about"));
+        aboutUsItem.setMnemonic(KeyEvent.VK_A);
+        aboutUsItem.setAction(aboutAction);
+        aboutMenu.add(aboutUsItem);
+        menu.add(aboutMenu);
+        
         return menu;
     }
 
@@ -190,6 +199,11 @@ public class PrintViewImpl implements PrintView {
     @Override
     public void setCancelModel(Action cancelAction) {
         this.cancelAction = cancelAction;
+    }
+    
+    @Override
+    public void setAboutModel(Action aboutAction){
+        this.aboutAction = aboutAction;
     }
 
     @Override
@@ -281,6 +295,16 @@ public class PrintViewImpl implements PrintView {
         log.debug("retry = " + retry);
         return retry;
     }
+    
+    public static void showAbout(){
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run() {
+                JOptionPane.showMessageDialog(mainFrame, R.getString("menu.about.message"), R.getString("menu.about.message.title"), JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+    }
+    
     private static final Logger log = Logger.getLogger(PrintViewImpl.class);
     private static JFrame mainFrame;
     private JButton printBtn;
@@ -288,6 +312,6 @@ public class PrintViewImpl implements PrintView {
     private PrintViewListModel buildingListModel, printerListModel;
     private final int FONT_SIZE = 12;
     private final Font f = new Font(null, Font.PLAIN, FONT_SIZE);
-    private Action printAction, cancelAction;
+    private Action printAction, cancelAction, aboutAction;
     private Config config;
 }

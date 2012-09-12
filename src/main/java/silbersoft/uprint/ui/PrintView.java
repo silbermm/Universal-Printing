@@ -13,6 +13,7 @@ public interface PrintView {
     
     public void setPrintModel(Action printAction);
     public void setCancelModel(Action cancelAction);
+    public void setAboutModel(Action aboutUsModel);
     public void setPrinterListModel(PrintViewListModel printListModel);
     public void setBuildingListModel(PrintViewListModel buildingListModel);
     
