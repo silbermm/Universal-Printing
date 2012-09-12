@@ -1,6 +1,7 @@
 package silbersoft.uprint.service;
 
 import com.typesafe.config.Config;
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import org.apache.log4j.Logger;
@@ -40,26 +41,33 @@ public class UCITHandler implements HandlerInterface {
     @Override
     public boolean process(PrintJob printJob) {
         final String METHOD_NAME = "process(): ";
-
-        final String CREATE_DIR = getTempDir();
+        final File CREATE_DIR = new File(getTempDir());
         boolean result = false;
         if (null != printJob
                 && null != printJob.getControlFile()
                 && null != printJob.getDataFile()) {
-
+            if(!CREATE_DIR.exists()){
+                if(!CREATE_DIR.mkdirs()){
+                    log.error("unable to create the tmp directory " + CREATE_DIR);
+                    return result;
+                }
+            }
             String user = printJob.getOwner();
 
             // create file name, pjb == print job
             String unique = UUID.randomUUID().toString();
             String name = unique + "." + printJob.getControlFile().getJobNumber() + ".pjb";
-            String fileName = CREATE_DIR.toString() + "/" + name;
+            File fileName = new File(CREATE_DIR.getAbsolutePath() + File.separator + name);
+            fileName.deleteOnExit();
             try {
-                FileUtil.writeFile(printJob.getDataFile().getContents(), fileName);
+                FileUtil.writeFile(printJob.getDataFile().getContents(), fileName.getAbsolutePath());
                 result = true;
             } catch (IOException e) {
                 log.error(METHOD_NAME + e.getMessage());
+                return result;
             }
-            printButton.setCurrentFile(fileName);            
+            log.debug("setting filename in the printButtonModel to " + fileName.getAbsolutePath());
+            printButton.setCurrentFile(fileName.getAbsolutePath());
             printerView.showFrame();
             buildingList.buildList("all");
                         
@@ -74,7 +82,7 @@ public class UCITHandler implements HandlerInterface {
     }
     
     private String getTempDir() {
-        String dir = "";
+        /*String dir = "";
         if (System.getProperty("os.name").startsWith("Win")) {
             String drive = "c:";
             if (System.getProperty("systemdrive") == null) {
@@ -84,7 +92,9 @@ public class UCITHandler implements HandlerInterface {
         } else {
             dir = "/tmp/ucit/wirelessprinting/" + JOB_DIR;
         }
-        return dir;
+        */ 
+        String tmpDir = config.getString("java.io.tmpdir");
+        return tmpDir + File.separator + "uprint" + File.separator + "jobs" + File.separator;
     }
     private Config config;
     private PrintButtonModel printButton;

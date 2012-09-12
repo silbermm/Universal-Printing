@@ -8,7 +8,6 @@ import javax.swing.event.ListSelectionEvent;
 import org.apache.log4j.Logger;
 import silbersoft.uprint.dao.PrinterDao;
 import silbersoft.uprint.domain.Printer;
-import silbersoft.uprint.domain.UniversalPrinter;
 
 /**
  *
@@ -20,10 +19,6 @@ public class PrinterListModel implements PrintViewListModel {
         super();
         this.printButtonModel = printButtonModel;
         printerListModel = new DefaultListModel();
-        testPrinter.setID(1);
-        testPrinter.setName("TestPrinter");
-        testPrinter.setQueue("test.queue");
-        testPrinter.setServer("oak.uc.edu");
     }
 
     @Override
@@ -35,7 +30,6 @@ public class PrinterListModel implements PrintViewListModel {
                 for (Printer p : printers) {
                     printerListModel.addElement(p);
                 }
-                printerListModel.addElement(testPrinter);
             }
         });
     }
@@ -85,5 +79,4 @@ public class PrinterListModel implements PrintViewListModel {
     private static DefaultListModel printerListModel;
     private PrinterDao printerDao;
     private PrintButtonModel printButtonModel;
-    private Printer testPrinter = new UniversalPrinter();
 }

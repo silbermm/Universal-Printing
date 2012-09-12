@@ -25,16 +25,20 @@ public class BuildingListModel implements PrintViewListModel {
     @Override
     public void buildList(String l) {
         log.debug("Getting Building List...");
+        locations = new ArrayList<Location>();
+        log.debug("Entrys in the locations list = " + locations.size());
         locations = printerDao.getBuildings();
+        log.debug("Entrys in the locations list after call to printDao = " + locations.size());
         Collections.sort(locations);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                log.debug("clearing the list");
+                buildingListModel.clear();
                 for (Location l : locations) {
                     log.debug("adding " + l.getName());
                     buildingListModel.addElement(l.getName());
                 }
-                buildingListModel.addElement("Testing");
             }
         });
     }
@@ -73,7 +77,7 @@ public class BuildingListModel implements PrintViewListModel {
     }
     private static final Logger log = Logger.getLogger(BuildingListModel.class);
     private PrinterDao printerDao;
-    private static List<Location> locations = new ArrayList<Location>();
+    private static List<Location> locations;
     private static DefaultListModel buildingListModel;
     private PrintViewListModel printerListModel;
 }

@@ -70,10 +70,6 @@ public class PrinterDaoImpl implements PrinterDao {
                 Node printerNode = listOfPrinters.item(i);
                 if (printerNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element printerElement = (Element) printerNode;
-                    NodeList printerNameList = printerElement.getElementsByTagName("name");
-                    Element printerNameElement = (Element) printerNameList.item(0);
-                    NodeList textPNList = printerNameElement.getChildNodes();
-
                     NodeList printerLocationList = printerElement.getElementsByTagName("location");
                     Element printerLocationElement = (Element) printerLocationList.item(0);
                     NodeList textLocList = printerLocationElement.getChildNodes();
@@ -86,6 +82,7 @@ public class PrinterDaoImpl implements PrinterDao {
         } catch (SAXException ex) {
         } catch (IOException ex) {
         }
+        locations.add(new PrinterLocation("Test"));
         return locations;
     }
 

@@ -4,6 +4,9 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
+import com.jgoodies.looks.plastic.PlasticLookAndFeel;
+import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
+import com.jgoodies.looks.plastic.theme.DesertBlue;
 import com.typesafe.config.Config;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -35,19 +38,16 @@ public class PrintViewImpl implements PrintView {
 
     public PrintViewImpl(Config config) {
         this.config = config;
+        PlasticLookAndFeel laf = new PlasticXPLookAndFeel();
+        PlasticLookAndFeel.setPlasticTheme(new DesertBlue());
         if (!System.getProperty("os.name").startsWith("Mac")) {
             try {
-                UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
+                UIManager.setLookAndFeel(laf);
             } catch (UnsupportedLookAndFeelException e) {
                 log.debug("Unsupported Look and Feel");
             }
         }
-        mainFrame = new JFrame();
-        mainFrame.setTitle(R.getString("frame.title"));
-        mainFrame.setSize(R.getInteger("frame.width"), R.getInteger("frame.height"));
-        mainFrame.setIconImage(R.getImage("frame.iconimage"));
-        mainFrame.setLayout(new BorderLayout());
-        mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
     }
 
     private void buildFrame() {
@@ -63,6 +63,12 @@ public class PrintViewImpl implements PrintView {
 
     @Override
     public void showFrame() {
+        mainFrame = new JFrame();
+        mainFrame.setTitle(R.getString("frame.title"));
+        mainFrame.setSize(R.getInteger("frame.width"), R.getInteger("frame.height"));
+        mainFrame.setIconImage(R.getImage("frame.iconimage"));
+        mainFrame.setLayout(new BorderLayout());
+        mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         buildFrame();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -206,6 +212,7 @@ public class PrintViewImpl implements PrintView {
             public void run() {
                 if (mainFrame.isDisplayable()) {
                     mainFrame.dispose();
+                    mainFrame = null;
                 }
             }
         });

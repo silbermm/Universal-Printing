@@ -4,8 +4,6 @@
 package silbersoft.uprint.app;
 
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
-import java.io.File;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -35,26 +33,11 @@ public class Main {
 
         AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(AppContext.class);
         ctx.registerShutdownHook();
-
-        Config config = ctx.getBean(Config.class);
-        /*
-        if (cmd.hasOption("c")) {
-            log.debug("config file = " + cmd.getOptionValue("c"));
-            File userSpecified = new File(cmd.getOptionValue("c"));
-            if (userSpecified.exists()) {   
-                config.checkValid(ConfigFactory.defaultReference(), cmd.getOptionValue("c"));                                
-                config = ConfigFactory.parseFile(userSpecified).withFallback(config);
-            }
-            log.debug("LPD PORT IS: " + config.getString("lpd.port"));
-        }               
-        * 
-        */
-        log.debug("LPD PORT IS: " + config.getString("lpd.port"));
         
         if (cmd.hasOption("daemon")) {
             LPDServer lpd = ctx.getBean(LPDServer.class);
             lpd.start();
-        } else {
+        } else if(cmd.hasOption("f")) {
             PrintButtonModel pBtn = ctx.getBean(PrintButtonModel.class);
             pBtn.setCurrentFile(cmd.getOptionValue("f"));
 
@@ -63,6 +46,10 @@ public class Main {
 
             BuildingListModel buildings = ctx.getBean(BuildingListModel.class);
             buildings.buildList("all");
+        } else {
+            // for now we will only run the program if f or daemon is passed
+            System.out.println("You must specify either the -f or --daemon options");
+            printHelp();
         }
     }
 
