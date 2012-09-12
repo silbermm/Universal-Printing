@@ -206,7 +206,7 @@ public class CommandReceiveJob extends CommandHandler {
 			dataFile.setHostName((String) headerVector.get(2));
 			dataFile.setJobNumber((String) headerVector.get(1));
 			dataFile.setContents(dFile);
-			log.debug(METHOD_NAME + "Data File=" + new String(dFile));
+			//log.debug(METHOD_NAME + "Data File=" + new String(dFile));
 			return dataFile;
 			} else {
 				throw new LPDException(METHOD_NAME + "dataFileHeader did not parse properly, dataFileHeader=" + dataFileHeader);

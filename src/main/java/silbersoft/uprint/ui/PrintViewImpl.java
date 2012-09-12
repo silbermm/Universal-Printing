@@ -11,13 +11,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -29,7 +35,7 @@ import silbersoft.uprint.ui.models.PrintViewListModel;
 import silbersoft.uprint.utils.R;
 
 /**
- * Sets up the Main GUI Element for uprint
+ * Sets up the Main GUI for uprint
  *
  * @author Matt Silbernagel
  */
@@ -58,6 +64,7 @@ public class PrintViewImpl implements PrintView {
         builder.add(createListPanel(), cc.xyw(1, 3, 2));
         builder.add(createButtonPanel(), cc.xy(2, 5));
         mainFrame.add(builder.getPanel());
+        mainFrame.setJMenuBar(createMainMenu());
     }
 
     @Override
@@ -124,7 +131,7 @@ public class PrintViewImpl implements PrintView {
         JScrollPane buildingListScroll = new JScrollPane(buildingList);
 
         FormLayout layout = new FormLayout("pref:grow, 20dlu, pref:grow", "8dlu, 4dlu, top:pref:grow");
-        layout.setColumnGroups(new int[][]{{1, 3}}); // make sure that columns 1 and 3 stay the same size
+        layout.setColumnGroups(new int[][]{{1, 3}}); // make sure that columns 1 and 3 stay the same size       
         PanelBuilder builder = new PanelBuilder(layout);
         builder.setDefaultDialogBorder();
         CellConstraints cc = new CellConstraints();
@@ -151,6 +158,28 @@ public class PrintViewImpl implements PrintView {
         builder.add(printBtn, cc.xy(2, 1));
         builder.add(cancelBtn, cc.xy(4, 1));
         return builder.getPanel();
+    }
+    
+    private JMenuBar createMainMenu(){
+        JMenuBar menu = new JMenuBar();
+        
+        //File Menu
+        JMenu fileMenu = new JMenu(R.getString("menu.file.title"));
+        fileMenu.setMnemonic(KeyEvent.VK_F);
+        // Print Item
+        JMenuItem printItem = new JMenuItem(R.getString("menu.file.print"));
+        printItem.setMnemonic(KeyEvent.VK_P);
+        printItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
+        printItem.setAction(printAction);
+        fileMenu.add(printItem);
+        // Exit Item
+        JMenuItem exitItem = new JMenuItem(R.getString("menu.file.exit"), KeyEvent.VK_X);
+        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
+        exitItem.setAction(cancelAction);
+        fileMenu.add(exitItem);
+        menu.add(fileMenu);
+        
+        return menu;
     }
 
     @Override
@@ -226,13 +255,31 @@ public class PrintViewImpl implements PrintView {
 
         String username = JOptionPane.showInputDialog(mainFrame, R.getString("frame.input.username.message"),
                 R.getString("frame.input.username.title"),
-                JOptionPane.OK_OPTION);
-        if (username == null || username.equals("")) {
+                JOptionPane.QUESTION_MESSAGE, null, null, System.getProperty("user.name")).toString();
+        if (username == null) {
+            // user canceled 
+            return null;
+        } else {
             username = System.getProperty("user.name");
         }
         return username;
+    }
 
+    public static void showSuccess() {
+        JOptionPane.showMessageDialog(mainFrame,
+                R.getString("print.success"),
+                R.getString("print.success.title"),
+                JOptionPane.INFORMATION_MESSAGE);
+    }
 
+    public static int showFailure(String errorMsg) {
+        int retry = JOptionPane.showConfirmDialog(mainFrame,
+                R.getString("print.fail") + "\nErrorMessage: " + errorMsg,
+                R.getString("print.fail.title"),
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.ERROR_MESSAGE);
+        log.debug("retry = " + retry);
+        return retry;
     }
     private static final Logger log = Logger.getLogger(PrintViewImpl.class);
     private static JFrame mainFrame;

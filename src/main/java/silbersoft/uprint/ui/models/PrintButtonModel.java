@@ -2,7 +2,6 @@ package silbersoft.uprint.ui.models;
 
 import com.typesafe.config.Config;
 import java.awt.event.ActionEvent;
-import java.util.concurrent.ExecutionException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
@@ -32,37 +31,39 @@ public class PrintButtonModel extends AbstractAction {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                if(config.getBoolean("username.prompt")){
-                username = PrintViewImpl.promptForUsername();
+                if (config.getBoolean("username.prompt")) {
+                    username = PrintViewImpl.promptForUsername();
+                    if (username == null) {
+                        log.debug("the user hit cancel...");
+                        return;
+                    }
                 } else {
                     username = System.getProperty("user.name");
                 }
                 log.debug(username + " is requesting this... ");
-                print = new SwingWorker() {
-                    @Override
-                    protected Object doInBackground() throws Exception {
-                        String result = currentPrinter.print(currentFile, jobName, username);
-                        log.debug(result);
-                        return result;
-                    }
-                };
-                print.execute ();
-            };
-        });
+                String printed = currentPrinter.print(currentFile, jobName, username);
 
-        if (print.isDone()) {
-            try {
-                String result = (String) print.get();
-                if (result.equals("")) {
-                    // yeah
+                if (printed.equals("")) {
+                    PrintViewImpl.showSuccess();
+                    PrintViewImpl.tearDown();
                 } else {
-                    // boo
-                    log.error(result);
+                    int tryAgain = PrintViewImpl.showFailure(printed);
+                    if (tryAgain == 0) {
+                        run();
+                    } else {
+                        PrintViewImpl.tearDown();
+                    }
+                    log.error(printed);
                 }
-            } catch (InterruptedException ex) {
-            } catch (ExecutionException ex) {
+
             }
-        }
+        ;
+    }
+
+    );       
+    }
+
+    private void doWork() {
     }
 
     public void setCurrentPrinter(Printer p) {
@@ -80,11 +81,10 @@ public class PrintButtonModel extends AbstractAction {
     public String getCurrentFile() {
         return this.currentFile;
     }
-    
-    public void setJobName(String jobName){
+
+    public void setJobName(String jobName) {
         this.jobName = jobName;
     }
-    
     private static Printer currentPrinter;
     private String currentFile;
     private String jobName;
