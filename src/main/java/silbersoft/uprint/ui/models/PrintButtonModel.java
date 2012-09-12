@@ -1,4 +1,4 @@
-package silbersoft.ucprint.ui.models;
+package silbersoft.uprint.ui.models;
 
 import com.typesafe.config.Config;
 import java.awt.event.ActionEvent;
@@ -8,7 +8,7 @@ import javax.swing.Action;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
-import silbersoft.ucprint.ui.PrintViewImpl;
+import silbersoft.uprint.ui.PrintViewImpl;
 import silbersoft.uprint.domain.Printer;
 import silbersoft.uprint.utils.R;
 

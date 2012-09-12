@@ -1,4 +1,4 @@
-package silbersoft.ucprint.ui;
+package silbersoft.uprint.ui;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -25,7 +25,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.log4j.Logger;
-import silbersoft.ucprint.ui.models.PrintViewListModel;
+import silbersoft.uprint.ui.models.PrintViewListModel;
 import silbersoft.uprint.domain.Printer;
 import silbersoft.uprint.utils.R;
 

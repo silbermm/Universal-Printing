@@ -1,7 +1,7 @@
-package silbersoft.ucprint.ui;
+package silbersoft.uprint.ui;
 
 import javax.swing.Action;
-import silbersoft.ucprint.ui.models.PrintViewListModel;
+import silbersoft.uprint.ui.models.PrintViewListModel;
 
 /**
  * @author Matt Silbernagel

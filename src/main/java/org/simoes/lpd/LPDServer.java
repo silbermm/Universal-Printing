@@ -10,9 +10,9 @@ import org.simoes.lpd.handler.QueueMonitor;
 import org.simoes.lpd.ui.PrintJobTableModel;
 import org.simoes.lpd.util.PrintQueue;
 import org.simoes.lpd.util.Queues;
-import silbersoft.ucprint.ui.PrintView;
-import silbersoft.ucprint.ui.models.PrintButtonModel;
-import silbersoft.ucprint.ui.models.PrintViewListModel;
+import silbersoft.uprint.ui.PrintView;
+import silbersoft.uprint.ui.models.PrintButtonModel;
+import silbersoft.uprint.ui.models.PrintViewListModel;
 
 
 /**

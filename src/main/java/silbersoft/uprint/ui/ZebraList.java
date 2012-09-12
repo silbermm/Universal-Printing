@@ -1,4 +1,4 @@
-package silbersoft.ucprint.ui;
+package silbersoft.uprint.ui;
 
 /**
  * A JList that supports a zebra stripe background.

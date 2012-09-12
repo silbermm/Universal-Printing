@@ -1,8 +1,8 @@
-package silbersoft.ucprint.ui.models;
+package silbersoft.uprint.ui.models;
 
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
-import silbersoft.ucprint.ui.PrintViewImpl;
+import silbersoft.uprint.ui.PrintViewImpl;
 import silbersoft.uprint.utils.R;
 
 /**

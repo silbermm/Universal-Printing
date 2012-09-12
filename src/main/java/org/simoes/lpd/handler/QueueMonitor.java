@@ -6,9 +6,9 @@ import org.simoes.lpd.exception.QueueException;
 import org.simoes.lpd.util.*;
 
 import org.apache.log4j.Logger;
-import silbersoft.ucprint.ui.PrintView;
-import silbersoft.ucprint.ui.models.PrintButtonModel;
-import silbersoft.ucprint.ui.models.PrintViewListModel;
+import silbersoft.uprint.ui.PrintView;
+import silbersoft.uprint.ui.models.PrintButtonModel;
+import silbersoft.uprint.ui.models.PrintViewListModel;
 
 /**
  * Watches the PrintQueue and removes jobs as they appear there.

@@ -1,4 +1,4 @@
-package silbersoft.ucprint.ui.models;
+package silbersoft.uprint.ui.models;
 
 import java.util.ArrayList;
 import java.util.Collections;

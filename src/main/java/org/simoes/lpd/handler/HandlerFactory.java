@@ -4,9 +4,9 @@ import com.typesafe.config.Config;
 import org.apache.log4j.Logger;
 import org.simoes.lpd.common.*;
 import org.simoes.util.*;
-import silbersoft.ucprint.ui.PrintView;
-import silbersoft.ucprint.ui.models.PrintButtonModel;
-import silbersoft.ucprint.ui.models.PrintViewListModel;
+import silbersoft.uprint.ui.PrintView;
+import silbersoft.uprint.ui.models.PrintButtonModel;
+import silbersoft.uprint.ui.models.PrintViewListModel;
 import silbersoft.uprint.service.UCITHandler;
 
 /**

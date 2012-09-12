@@ -1,4 +1,4 @@
-package silbersoft.ucprint.ui.models;
+package silbersoft.uprint.ui.models;
 
 import javax.swing.DefaultListModel;
 import javax.swing.event.ListSelectionListener;

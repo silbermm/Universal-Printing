@@ -1,4 +1,4 @@
-package silbersoft.ucprint.ui;
+package silbersoft.uprint.ui;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

@@ -16,9 +16,9 @@ import org.apache.log4j.Logger;
 import org.simoes.lpd.LPDServer;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
-import silbersoft.ucprint.ui.PrintView;
-import silbersoft.ucprint.ui.models.BuildingListModel;
-import silbersoft.ucprint.ui.models.PrintButtonModel;
+import silbersoft.uprint.ui.PrintView;
+import silbersoft.uprint.ui.models.BuildingListModel;
+import silbersoft.uprint.ui.models.PrintButtonModel;
 import silbersoft.uprint.utils.R;
 
 /**
