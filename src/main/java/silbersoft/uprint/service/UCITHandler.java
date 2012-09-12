@@ -3,6 +3,8 @@ package silbersoft.uprint.service;
 import com.typesafe.config.Config;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.simoes.lpd.common.PrintJob;
@@ -14,7 +16,7 @@ import silbersoft.uprint.ui.models.PrintViewListModel;
 
 /**
  *
- * @author silbermm
+ * @author Matt Silbernagel
  */
 public class UCITHandler implements HandlerInterface {
 
@@ -68,13 +70,13 @@ public class UCITHandler implements HandlerInterface {
             }
             log.debug("setting filename in the printButtonModel to " + fileName.getAbsolutePath());
             printButton.setCurrentFile(fileName.getAbsolutePath());
+            try {
+                printButton.setJobName(URLEncoder.encode(printJob.getName(), "UTF-16LE"));
+            } catch (UnsupportedEncodingException ex) {
+                printButton.setJobName(name);
+            }
             printerView.showFrame();
             buildingList.buildList("all");
-                        
-            // Now do we need to run an external program?
-            //if (config.getBoolean("application.postexec")) {
-            //    runAs(config.getString("application.postexec"), user, fileName);
-            //}
         } else {
             log.error(METHOD_NAME + "The printJob or printJob.getControlFile() or printJob.getDataFile() were empty");
         }
@@ -82,17 +84,6 @@ public class UCITHandler implements HandlerInterface {
     }
     
     private String getTempDir() {
-        /*String dir = "";
-        if (System.getProperty("os.name").startsWith("Win")) {
-            String drive = "c:";
-            if (System.getProperty("systemdrive") == null) {
-                drive = "c:";
-            }
-            dir = drive + "/Windows/Temp/ucit/wirelessprinting/" + JOB_DIR;
-        } else {
-            dir = "/tmp/ucit/wirelessprinting/" + JOB_DIR;
-        }
-        */ 
         String tmpDir = config.getString("java.io.tmpdir");
         return tmpDir + File.separator + "uprint" + File.separator + "jobs" + File.separator;
     }

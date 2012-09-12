@@ -8,8 +8,8 @@ import javax.swing.Action;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
-import silbersoft.uprint.ui.PrintViewImpl;
 import silbersoft.uprint.domain.Printer;
+import silbersoft.uprint.ui.PrintViewImpl;
 import silbersoft.uprint.utils.R;
 
 /**
@@ -41,7 +41,7 @@ public class PrintButtonModel extends AbstractAction {
                 print = new SwingWorker() {
                     @Override
                     protected Object doInBackground() throws Exception {
-                        String result = currentPrinter.print(currentFile, "test", username);
+                        String result = currentPrinter.print(currentFile, jobName, username);
                         log.debug(result);
                         return result;
                     }
@@ -80,8 +80,14 @@ public class PrintButtonModel extends AbstractAction {
     public String getCurrentFile() {
         return this.currentFile;
     }
+    
+    public void setJobName(String jobName){
+        this.jobName = jobName;
+    }
+    
     private static Printer currentPrinter;
     private String currentFile;
+    private String jobName;
     private String username;
     private Config config;
     private SwingWorker print;
