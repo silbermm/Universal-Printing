@@ -1,9 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>edu.uc.labs</groupId>
-    <artifactId>ucprint2</artifactId>
+    <artifactId>uprint</artifactId>
     <packaging>jar</packaging>
     <url>http://maven.apache.org</url>    
     <parent>
@@ -11,12 +10,11 @@
         <artifactId>WirelessPrinting</artifactId>
         <version>1.0.2</version>
     </parent>    
-    <name>ucprint2</name>
+    <name>Universal Printing</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <buildNumber>${maven.build.timestamp}</buildNumber>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -69,7 +67,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>ucprint2</finalName>
+        <finalName>uprint</finalName>
         <plugins>
             <plugin>  
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -118,6 +116,5 @@
             <name>Typesafe Repository</name>
             <url>http://repo.typesafe.com/typesafe/releases/</url>
         </repository>
-    </repositories>
-    
+    </repositories> 
 </project>
