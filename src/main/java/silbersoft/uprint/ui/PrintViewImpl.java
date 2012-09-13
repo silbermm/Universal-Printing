@@ -3,18 +3,20 @@ package silbersoft.uprint.ui;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.looks.HeaderStyle;
+import com.jgoodies.looks.Options;
 import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
-import com.jgoodies.looks.plastic.theme.DesertBlue;
+import com.jgoodies.looks.plastic.theme.ExperienceBlue;
 import com.typesafe.config.Config;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -44,7 +46,7 @@ public class PrintViewImpl implements PrintView {
     public PrintViewImpl(Config config) {
         this.config = config;
         PlasticLookAndFeel laf = new PlasticXPLookAndFeel();
-        PlasticLookAndFeel.setPlasticTheme(new DesertBlue());
+        PlasticLookAndFeel.setCurrentTheme(new ExperienceBlue());
         if (!System.getProperty("os.name").startsWith("Mac")) {
             try {
                 UIManager.setLookAndFeel(laf);
@@ -96,7 +98,7 @@ public class PrintViewImpl implements PrintView {
      *
      * @return Component
      */
-    private Component createTitlePanel() {
+    private JComponent createTitlePanel() {
         FormLayout layout = new FormLayout(
                 "left:125px:grow, center:pref, right:25px:grow",
                 "center:74px, bottom:pref");
@@ -106,7 +108,7 @@ public class PrintViewImpl implements PrintView {
         CellConstraints cc = new CellConstraints();
         builder.add(new ImagePanel(), cc.xy(1, 1));
         JLabel title = new JLabel(R.getString("frame.largeTitle"));
-        title.setFont(new Font("", Font.PLAIN, 32));
+        title.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 32));
         builder.add(title, cc.xy(2, 1));
         return builder.getPanel();
     }
@@ -116,7 +118,7 @@ public class PrintViewImpl implements PrintView {
      *
      * @return
      */
-    private Component createListPanel() {
+    private JComponent createListPanel() {
         JList printerList = new ZebraList(printerListModel.getListModel());
         printerList.setCellRenderer(new PrinterCellRenderer());
         printerList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -148,7 +150,7 @@ public class PrintViewImpl implements PrintView {
      *
      * @return
      */
-    private Component createButtonPanel() {
+    private JComponent createButtonPanel() {
         FormLayout layout = new FormLayout("pref:grow,50dlu,4dlu,50dlu", "pref");
         PanelBuilder builder = new PanelBuilder(layout);
         printBtn = new JButton(printAction);
@@ -159,35 +161,40 @@ public class PrintViewImpl implements PrintView {
         builder.add(cancelBtn, cc.xy(4, 1));
         return builder.getPanel();
     }
-    
-    private JMenuBar createMainMenu(){
-        JMenuBar menu = new JMenuBar();
+
+    private JMenuBar createMainMenu() {
         
+        menu = new JMenuBar();
         //File Menu
         JMenu fileMenu = new JMenu(R.getString("menu.file.title"));
         fileMenu.setMnemonic(KeyEvent.VK_F);
         // Print Item
         JMenuItem printItem = new JMenuItem(R.getString("menu.file.print"));
-        printItem.setMnemonic(KeyEvent.VK_P);
+        printItem.setMnemonic(KeyEvent.VK_R);
         printItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
         printItem.setAction(printAction);
         fileMenu.add(printItem);
         // Exit Item
-        JMenuItem exitItem = new JMenuItem(R.getString("menu.file.exit"), KeyEvent.VK_X);
+        JMenuItem exitItem = new JMenuItem(R.getString("menu.file.exit"), KeyEvent.VK_E);
         exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
         exitItem.setAction(cancelAction);
         fileMenu.add(exitItem);
-        menu.add(fileMenu);
-        
+
         //Help Menu
         JMenu aboutMenu = new JMenu(R.getString("menu.about.title"));
         aboutMenu.setMnemonic(KeyEvent.VK_H);
+        log.debug("------------- " + R.getString("menu.about.about") + " --------------------");
         JMenuItem aboutUsItem = new JMenuItem(R.getString("menu.about.about"));
         aboutUsItem.setMnemonic(KeyEvent.VK_A);
         aboutUsItem.setAction(aboutAction);
+        aboutMenu.addSeparator();
         aboutMenu.add(aboutUsItem);
-        menu.add(aboutMenu);
         
+        menu.add(fileMenu);
+        menu.add(aboutMenu);
+
+        menu.putClientProperty(Options.HEADER_STYLE_KEY,
+                HeaderStyle.BOTH);
         return menu;
     }
 
@@ -200,9 +207,9 @@ public class PrintViewImpl implements PrintView {
     public void setCancelModel(Action cancelAction) {
         this.cancelAction = cancelAction;
     }
-    
+
     @Override
-    public void setAboutModel(Action aboutAction){
+    public void setAboutModel(Action aboutAction) {
         this.aboutAction = aboutAction;
     }
 
@@ -228,7 +235,7 @@ public class PrintViewImpl implements PrintView {
         }
 
         @Override
-        public Component getListCellRendererComponent(JList jlist, Object o, int i, boolean bln, boolean bln1) {
+        public JComponent getListCellRendererComponent(JList jlist, Object o, int i, boolean bln, boolean bln1) {
             Printer printer = (Printer) o;
             setText(printer.getName());
             setFont(f);
@@ -295,23 +302,23 @@ public class PrintViewImpl implements PrintView {
         log.debug("retry = " + retry);
         return retry;
     }
-    
-    public static void showAbout(){
-        SwingUtilities.invokeLater(new Runnable(){
+
+    public static void showAbout() {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 JOptionPane.showMessageDialog(mainFrame, R.getString("menu.about.message"), R.getString("menu.about.message.title"), JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }
-    
     private static final Logger log = Logger.getLogger(PrintViewImpl.class);
     private static JFrame mainFrame;
     private JButton printBtn;
     private JButton cancelBtn;
     private PrintViewListModel buildingListModel, printerListModel;
+    private JMenuBar menu;
     private final int FONT_SIZE = 12;
-    private final Font f = new Font(null, Font.PLAIN, FONT_SIZE);
+    private final Font f = new Font(Font.SANS_SERIF, Font.PLAIN, FONT_SIZE);
     private Action printAction, cancelAction, aboutAction;
     private Config config;
 }
