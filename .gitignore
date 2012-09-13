@@ -2,7 +2,7 @@ target/
 .svn/
 cp.txt
 nbactions.xml
-application.conf
+uprint.conf
 .svn*
 .svn/*
 */.svn
