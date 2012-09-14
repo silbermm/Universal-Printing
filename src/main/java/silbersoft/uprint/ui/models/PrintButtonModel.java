@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
 import silbersoft.uprint.domain.Printer;
 import silbersoft.uprint.ui.PrintViewImpl;
@@ -37,6 +36,7 @@ public class PrintButtonModel extends AbstractAction {
                     username = PrintViewImpl.promptForUsername();
                     if (username == null) {
                         log.debug("the user hit cancel...");
+                        StatusBar.setStatus(R.getString("status.text.ready"));
                         return;
                     }
                 } else {
@@ -44,7 +44,7 @@ public class PrintButtonModel extends AbstractAction {
                 }
                 log.debug(username + " is requesting this... ");
                 StatusBar.setStatus("Printng " + jobName + " to " + currentPrinter.getName() + "...");
-                String printed = currentPrinter.print(currentFile, jobName, username);                
+                String printed = currentPrinter.print(currentFile, jobName, username);
                 if (printed.equals("")) {
                     StatusBar.setStatus(R.getString("status.text.ready"));
                     PrintViewImpl.showSuccess();
@@ -59,15 +59,8 @@ public class PrintButtonModel extends AbstractAction {
                     }
                     log.error(printed);
                 }
-
-            }
-        ;
-    }
-
-    );       
-    }
-
-    private void doWork() {
+            };
+    });       
     }
 
     public void setCurrentPrinter(Printer p) {
@@ -94,6 +87,5 @@ public class PrintButtonModel extends AbstractAction {
     private String jobName;
     private String username;
     private Config config;
-    private SwingWorker print;
     private static final Logger log = Logger.getLogger(PrintButtonModel.class);
 }

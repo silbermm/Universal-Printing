@@ -11,6 +11,7 @@ import com.jgoodies.looks.plastic.theme.ExperienceBlue;
 import com.typesafe.config.Config;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -54,36 +55,36 @@ public class PrintViewImpl implements PrintView {
                 log.debug("Unsupported Look and Feel");
             }
         }
-        mainFrame = new JFrame();
-        mainFrame.setTitle(R.getString("frame.title"));
-        mainFrame.setSize(R.getInteger("frame.width"), R.getInteger("frame.height"));
-        mainFrame.setIconImage(R.getImage("frame.iconimage"));
-        mainFrame.setLayout(new BorderLayout());
-        mainFrame.setAlwaysOnTop(true);
-        mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     private void buildFrame() {
-        FormLayout layout = new FormLayout("pref:grow, pref:grow", "pref, 4dlu, pref, pref:grow, pref");
+        FormLayout layout = new FormLayout("pref:grow, pref:grow", "pref, 4dlu, pref, pref:grow, pref,pref");
         PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
         builder.add(createTitlePanel(), cc.xyw(1, 1, 2));
         builder.addSeparator("", cc.xyw(1, 2, 2));
         builder.add(createListPanel(), cc.xyw(1, 3, 2));
         builder.add(createButtonPanel(), cc.xy(2, 5));
+        builder.add(createStatusPanel(), cc.xyw(1,6, 2));
         mainFrame.add(builder.getPanel());
         mainFrame.setJMenuBar(createMainMenu());
-        StatusBar statusBar = new StatusBar();
-        mainFrame.add(statusBar, BorderLayout.SOUTH);
+        
     }
 
     @Override
     public void showFrame() {
+        mainFrame = new JFrame();
+        mainFrame.setTitle(R.getString("frame.title"));
+        mainFrame.setSize(R.getInteger("frame.width"), R.getInteger("frame.height"));
+        mainFrame.setIconImage(R.getImage("frame.iconimage"));
+        mainFrame.setLayout(new BorderLayout());
+        mainFrame.setAlwaysOnTop(true);
+        mainFrame.setResizable(false);
+        mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         buildFrame();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                //buildFrame();
                 mainFrame.validate();
                 mainFrame.pack();
                 mainFrame.setVisible(true);
@@ -134,8 +135,9 @@ public class PrintViewImpl implements PrintView {
         buildingList.addListSelectionListener(buildingListModel);
         buildingList.setFont(f);
         JScrollPane buildingListScroll = new JScrollPane(buildingList);
-
-        FormLayout layout = new FormLayout("pref:grow, 20dlu, pref:grow", "8dlu, 4dlu, top:pref:grow");
+        
+        FormLayout layout = new FormLayout("pref:grow, 20dlu, pref:grow",   //columns
+                                           "8dlu, 4dlu, bottom:pref:grow"); //rows
         layout.setColumnGroups(new int[][]{{1, 3}}); // make sure that columns 1 and 3 stay the same size       
         PanelBuilder builder = new PanelBuilder(layout);
         builder.setDefaultDialogBorder();
@@ -154,7 +156,7 @@ public class PrintViewImpl implements PrintView {
      * @return
      */
     private JComponent createButtonPanel() {
-        FormLayout layout = new FormLayout("pref:grow,50dlu,4dlu,50dlu", "pref");
+        FormLayout layout = new FormLayout("pref:grow,50dlu,4dlu,50dlu", "pref");        
         PanelBuilder builder = new PanelBuilder(layout);
         printBtn = new JButton(printAction);
         cancelBtn = new JButton(cancelAction);
@@ -164,12 +166,21 @@ public class PrintViewImpl implements PrintView {
         builder.add(cancelBtn, cc.xy(4, 1));
         return builder.getPanel();
     }
+    
+    private JComponent createStatusPanel() {
+        StatusBar statusBar = new StatusBar();
+        FormLayout layout = new FormLayout("pref:grow", "25dlu");        
+        PanelBuilder builder = new PanelBuilder(layout);
+        CellConstraints cc = new CellConstraints();
+        builder.add(statusBar);
+        return builder.getPanel();        
+    }
 
     private JMenuBar createMainMenu() {
 
         JMenuBar menu = new JMenuBar();
         menu.setFont(f);
-        
+
         //File Menu
         JMenu fileMenu = new JMenu(R.getString("menu.file.title"));
         fileMenu.setMnemonic(KeyEvent.VK_F);
@@ -198,7 +209,7 @@ public class PrintViewImpl implements PrintView {
         getHelpItem.setAction(getHelpAction);
         getHelpItem.setMnemonic(KeyEvent.VK_G);
         aboutMenu.add(getHelpItem);
-        
+
         menu.add(fileMenu);
         menu.add(aboutMenu);
         menu.putClientProperty(Options.HEADER_STYLE_KEY,
@@ -220,10 +231,10 @@ public class PrintViewImpl implements PrintView {
     public void setAboutModel(Action aboutAction) {
         this.aboutAction = aboutAction;
     }
-    
+
     @Override
-    public void setGetHelpModel(Action helpAction){
-        this.getHelpAction = helpAction;        
+    public void setGetHelpModel(Action helpAction) {
+        this.getHelpAction = helpAction;
     }
 
     @Override
@@ -235,7 +246,7 @@ public class PrintViewImpl implements PrintView {
     public void setPrinterListModel(PrintViewListModel printListModel) {
         this.printerListModel = printListModel;
     }
-    
+
     /**
      * Determines how the printers are displayed in the list
      */
@@ -274,6 +285,7 @@ public class PrintViewImpl implements PrintView {
             public void run() {
                 if (mainFrame.isDisplayable()) {
                     mainFrame.dispose();
+                    mainFrame = null;
                 }
             }
         });
@@ -285,12 +297,16 @@ public class PrintViewImpl implements PrintView {
      * @return
      */
     public static String promptForUsername() {
-
-        String username = JOptionPane.showInputDialog(mainFrame, R.getString("frame.input.username.message"),
+        String username = null;
+        try{
+        username = JOptionPane.showInputDialog(mainFrame, R.getString("frame.input.username.message"),
                 R.getString("frame.input.username.title"),
                 JOptionPane.QUESTION_MESSAGE, null, null, System.getProperty("user.name")).toString();
         if (username == null) {
             // user canceled 
+            return null;
+        }
+        }catch (NullPointerException e){
             return null;
         }
         return username;

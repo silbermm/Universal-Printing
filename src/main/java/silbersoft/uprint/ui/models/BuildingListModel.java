@@ -21,7 +21,7 @@ public class BuildingListModel implements PrintViewListModel {
 
     public BuildingListModel(PrintViewListModel printerListModel) {
         this.printerListModel = printerListModel;
-        buildingListModel = new DefaultListModel();
+        buildingListModel = new DefaultListModel();        
     }
 
     @Override
