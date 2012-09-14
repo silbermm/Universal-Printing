@@ -11,10 +11,15 @@ import com.jgoodies.looks.plastic.theme.ExperienceBlue;
 import com.typesafe.config.Config;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.Action;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -24,6 +29,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
@@ -54,7 +60,13 @@ public class PrintViewImpl implements PrintView {
                 log.debug("Unsupported Look and Feel");
             }
         }
-
+        mainFrame = new JFrame();
+        mainFrame.setTitle(R.getString("frame.title"));
+        mainFrame.setSize(R.getInteger("frame.width"), R.getInteger("frame.height"));
+        mainFrame.setIconImage(R.getImage("frame.iconimage"));
+        mainFrame.setLayout(new BorderLayout());
+        mainFrame.setAlwaysOnTop(true);
+        mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     private void buildFrame() {
@@ -67,20 +79,17 @@ public class PrintViewImpl implements PrintView {
         builder.add(createButtonPanel(), cc.xy(2, 5));
         mainFrame.add(builder.getPanel());
         mainFrame.setJMenuBar(createMainMenu());
+        StatusBar statusBar = new StatusBar();
+        mainFrame.add(statusBar, BorderLayout.SOUTH);
     }
 
     @Override
     public void showFrame() {
-        mainFrame = new JFrame();
-        mainFrame.setTitle(R.getString("frame.title"));
-        mainFrame.setSize(R.getInteger("frame.width"), R.getInteger("frame.height"));
-        mainFrame.setIconImage(R.getImage("frame.iconimage"));
-        mainFrame.setLayout(new BorderLayout());
-        mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         buildFrame();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                //buildFrame();
                 mainFrame.validate();
                 mainFrame.pack();
                 mainFrame.setVisible(true);
@@ -163,36 +172,35 @@ public class PrintViewImpl implements PrintView {
     }
 
     private JMenuBar createMainMenu() {
+
+        JMenuBar menu = new JMenuBar();
+        menu.setFont(f);
         
-        menu = new JMenuBar();
         //File Menu
         JMenu fileMenu = new JMenu(R.getString("menu.file.title"));
         fileMenu.setMnemonic(KeyEvent.VK_F);
         // Print Item
-        JMenuItem printItem = new JMenuItem(R.getString("menu.file.print"));
+        printItem = new JMenuItem(R.getString("menu.file.print"));
+        printItem.setAction(printAction);
         printItem.setMnemonic(KeyEvent.VK_R);
         printItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
-        printItem.setAction(printAction);
         fileMenu.add(printItem);
         // Exit Item
-        JMenuItem exitItem = new JMenuItem(R.getString("menu.file.exit"), KeyEvent.VK_E);
-        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
+        exitItem = new JMenuItem(R.getString("menu.file.exit"), KeyEvent.VK_E);
         exitItem.setAction(cancelAction);
+        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
         fileMenu.add(exitItem);
 
         //Help Menu
         JMenu aboutMenu = new JMenu(R.getString("menu.about.title"));
         aboutMenu.setMnemonic(KeyEvent.VK_H);
-        log.debug("------------- " + R.getString("menu.about.about") + " --------------------");
-        JMenuItem aboutUsItem = new JMenuItem(R.getString("menu.about.about"));
-        aboutUsItem.setMnemonic(KeyEvent.VK_A);
-        aboutUsItem.setAction(aboutAction);
-        aboutMenu.addSeparator();
-        aboutMenu.add(aboutUsItem);
-        
+        // About Item
+        aboutItem = new JMenuItem(R.getString("menu.about.about"));
+        aboutItem.setAction(aboutAction);
+        aboutItem.setMnemonic(KeyEvent.VK_A);
+        aboutMenu.add(aboutItem);
         menu.add(fileMenu);
         menu.add(aboutMenu);
-
         menu.putClientProperty(Options.HEADER_STYLE_KEY,
                 HeaderStyle.BOTH);
         return menu;
@@ -221,6 +229,98 @@ public class PrintViewImpl implements PrintView {
     @Override
     public void setPrinterListModel(PrintViewListModel printListModel) {
         this.printerListModel = printListModel;
+    }
+
+    private class StatusBar extends JPanel {
+
+        public StatusBar() {
+            setLayout(new BorderLayout());
+            setPreferredSize(new Dimension(10, 23));
+
+            JPanel rightPanel = new JPanel(new BorderLayout());
+            rightPanel.add(new JLabel(new AngledLinesWindowsCornerIcon()), BorderLayout.SOUTH);
+            rightPanel.setOpaque(false);
+            
+            rightPanel.putClientProperty(Options.HEADER_STYLE_KEY,
+                HeaderStyle.BOTH);
+            
+            add(rightPanel, BorderLayout.EAST);
+            //setBackground(SystemColor.control);
+            
+        }
+        
+        public void setText(String text){
+            
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            int y = 0;
+            g.setColor(new Color(156, 154, 140));
+            g.drawLine(0, y, getWidth(), y);
+            y++;
+            g.setColor(new Color(196, 194, 183));
+            g.drawLine(0, y, getWidth(), y);
+            y++;
+            g.setColor(new Color(218, 215, 201));
+            g.drawLine(0, y, getWidth(), y);
+            y++;
+            g.setColor(new Color(233, 231, 217));
+            g.drawLine(0, y, getWidth(), y);
+
+            y = getHeight() - 3;
+            g.setColor(new Color(233, 232, 218));
+            g.drawLine(0, y, getWidth(), y);
+            y++;
+            g.setColor(new Color(233, 231, 216));
+            g.drawLine(0, y, getWidth(), y);
+            y = getHeight() - 1;
+            g.setColor(new Color(221, 221, 220));
+            g.drawLine(0, y, getWidth(), y);
+
+        }
+    }
+
+    private class AngledLinesWindowsCornerIcon implements Icon {
+
+        private final Color WHITE_LINE_COLOR = new Color(255, 255, 255);
+        private final Color GRAY_LINE_COLOR = new Color(172, 168, 153);
+        private static final int WIDTH = 13;
+        private static final int HEIGHT = 13;
+
+        @Override
+        public int getIconHeight() {
+            return WIDTH;
+        }
+
+        @Override
+        public int getIconWidth() {
+            return HEIGHT;
+        }
+
+        @Override
+        public void paintIcon(Component c, Graphics g, int x, int y) {
+
+            g.setColor(WHITE_LINE_COLOR);
+            g.drawLine(0, 12, 12, 0);
+            g.drawLine(5, 12, 12, 5);
+            g.drawLine(10, 12, 12, 10);
+
+            g.setColor(GRAY_LINE_COLOR);
+            g.drawLine(1, 12, 12, 1);
+            g.drawLine(2, 12, 12, 2);
+            g.drawLine(3, 12, 12, 3);
+
+            g.drawLine(6, 12, 12, 6);
+            g.drawLine(7, 12, 12, 7);
+            g.drawLine(8, 12, 12, 8);
+
+            g.drawLine(11, 12, 12, 11);
+            g.drawLine(12, 12, 12, 12);
+
+        }
     }
 
     /**
@@ -261,7 +361,6 @@ public class PrintViewImpl implements PrintView {
             public void run() {
                 if (mainFrame.isDisplayable()) {
                     mainFrame.dispose();
-                    mainFrame = null;
                 }
             }
         });
@@ -280,8 +379,6 @@ public class PrintViewImpl implements PrintView {
         if (username == null) {
             // user canceled 
             return null;
-        } else {
-            username = System.getProperty("user.name");
         }
         return username;
     }
@@ -316,7 +413,7 @@ public class PrintViewImpl implements PrintView {
     private JButton printBtn;
     private JButton cancelBtn;
     private PrintViewListModel buildingListModel, printerListModel;
-    private JMenuBar menu;
+    private JMenuItem printItem, exitItem, aboutItem;
     private final int FONT_SIZE = 12;
     private final Font f = new Font(Font.SANS_SERIF, Font.PLAIN, FONT_SIZE);
     private Action printAction, cancelAction, aboutAction;

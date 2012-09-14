@@ -3,7 +3,6 @@
  */
 package silbersoft.uprint.app;
 
-import com.typesafe.config.Config;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -16,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.simoes.lpd.LPDServer;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
+import silbersoft.uprint.ui.MenuTestView;
 import silbersoft.uprint.ui.PrintView;
 import silbersoft.uprint.ui.models.BuildingListModel;
 import silbersoft.uprint.ui.models.PrintButtonModel;
@@ -30,7 +30,7 @@ public class Main {
     public static void main(String[] args) {
 
         parse(args);
-
+       
         AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(AppContext.class);
         ctx.registerShutdownHook();
         
@@ -48,9 +48,12 @@ public class Main {
             buildings.buildList("all");
         } else {
             // for now we will only run the program if f or daemon is passed
+            //MenuTestView m = ctx.getBean(MenuTestView.class);
+            //m.showFrame();
             System.out.println("You must specify either the -f or --daemon options");
             printHelp();
         }
+        
     }
 
     private static void parse(String[] args) {

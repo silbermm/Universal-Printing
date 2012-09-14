@@ -15,6 +15,7 @@ import silbersoft.uprint.ui.models.PrintViewListModel;
 import silbersoft.uprint.ui.models.PrinterListModel;
 import silbersoft.uprint.dao.PrinterDao;
 import silbersoft.uprint.dao.PrinterDaoImpl;
+import silbersoft.uprint.ui.MenuTestView;
 import silbersoft.uprint.ui.models.AboutUsModel;
 
 /**
@@ -74,6 +75,11 @@ public class AppContext {
         printFrame.setBuildingListModel(buildingListModel());
         printFrame.setPrinterListModel(printerListModel());
         return printFrame;
+    }
+    
+    @Bean
+    public MenuTestView menuTest() {
+        return new MenuTestView();
     }
     
     @Bean LPDServer lpdServer(){
