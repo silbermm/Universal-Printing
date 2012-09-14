@@ -11,15 +11,10 @@ import com.jgoodies.looks.plastic.theme.ExperienceBlue;
 import com.typesafe.config.Config;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.Action;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -29,7 +24,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
@@ -199,6 +193,12 @@ public class PrintViewImpl implements PrintView {
         aboutItem.setAction(aboutAction);
         aboutItem.setMnemonic(KeyEvent.VK_A);
         aboutMenu.add(aboutItem);
+        //Get Help Item
+        JMenuItem getHelpItem = new JMenuItem(R.getString("menu.about.gethelp"));
+        getHelpItem.setAction(getHelpAction);
+        getHelpItem.setMnemonic(KeyEvent.VK_G);
+        aboutMenu.add(getHelpItem);
+        
         menu.add(fileMenu);
         menu.add(aboutMenu);
         menu.putClientProperty(Options.HEADER_STYLE_KEY,
@@ -220,6 +220,11 @@ public class PrintViewImpl implements PrintView {
     public void setAboutModel(Action aboutAction) {
         this.aboutAction = aboutAction;
     }
+    
+    @Override
+    public void setGetHelpModel(Action helpAction){
+        this.getHelpAction = helpAction;        
+    }
 
     @Override
     public void setBuildingListModel(PrintViewListModel buildingListModel) {
@@ -230,99 +235,7 @@ public class PrintViewImpl implements PrintView {
     public void setPrinterListModel(PrintViewListModel printListModel) {
         this.printerListModel = printListModel;
     }
-
-    private class StatusBar extends JPanel {
-
-        public StatusBar() {
-            setLayout(new BorderLayout());
-            setPreferredSize(new Dimension(10, 23));
-
-            JPanel rightPanel = new JPanel(new BorderLayout());
-            rightPanel.add(new JLabel(new AngledLinesWindowsCornerIcon()), BorderLayout.SOUTH);
-            rightPanel.setOpaque(false);
-            
-            rightPanel.putClientProperty(Options.HEADER_STYLE_KEY,
-                HeaderStyle.BOTH);
-            
-            add(rightPanel, BorderLayout.EAST);
-            //setBackground(SystemColor.control);
-            
-        }
-        
-        public void setText(String text){
-            
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-
-            int y = 0;
-            g.setColor(new Color(156, 154, 140));
-            g.drawLine(0, y, getWidth(), y);
-            y++;
-            g.setColor(new Color(196, 194, 183));
-            g.drawLine(0, y, getWidth(), y);
-            y++;
-            g.setColor(new Color(218, 215, 201));
-            g.drawLine(0, y, getWidth(), y);
-            y++;
-            g.setColor(new Color(233, 231, 217));
-            g.drawLine(0, y, getWidth(), y);
-
-            y = getHeight() - 3;
-            g.setColor(new Color(233, 232, 218));
-            g.drawLine(0, y, getWidth(), y);
-            y++;
-            g.setColor(new Color(233, 231, 216));
-            g.drawLine(0, y, getWidth(), y);
-            y = getHeight() - 1;
-            g.setColor(new Color(221, 221, 220));
-            g.drawLine(0, y, getWidth(), y);
-
-        }
-    }
-
-    private class AngledLinesWindowsCornerIcon implements Icon {
-
-        private final Color WHITE_LINE_COLOR = new Color(255, 255, 255);
-        private final Color GRAY_LINE_COLOR = new Color(172, 168, 153);
-        private static final int WIDTH = 13;
-        private static final int HEIGHT = 13;
-
-        @Override
-        public int getIconHeight() {
-            return WIDTH;
-        }
-
-        @Override
-        public int getIconWidth() {
-            return HEIGHT;
-        }
-
-        @Override
-        public void paintIcon(Component c, Graphics g, int x, int y) {
-
-            g.setColor(WHITE_LINE_COLOR);
-            g.drawLine(0, 12, 12, 0);
-            g.drawLine(5, 12, 12, 5);
-            g.drawLine(10, 12, 12, 10);
-
-            g.setColor(GRAY_LINE_COLOR);
-            g.drawLine(1, 12, 12, 1);
-            g.drawLine(2, 12, 12, 2);
-            g.drawLine(3, 12, 12, 3);
-
-            g.drawLine(6, 12, 12, 6);
-            g.drawLine(7, 12, 12, 7);
-            g.drawLine(8, 12, 12, 8);
-
-            g.drawLine(11, 12, 12, 11);
-            g.drawLine(12, 12, 12, 12);
-
-        }
-    }
-
+    
     /**
      * Determines how the printers are displayed in the list
      */
@@ -416,6 +329,6 @@ public class PrintViewImpl implements PrintView {
     private JMenuItem printItem, exitItem, aboutItem;
     private final int FONT_SIZE = 12;
     private final Font f = new Font(Font.SANS_SERIF, Font.PLAIN, FONT_SIZE);
-    private Action printAction, cancelAction, aboutAction;
+    private Action printAction, cancelAction, aboutAction, getHelpAction;
     private Config config;
 }

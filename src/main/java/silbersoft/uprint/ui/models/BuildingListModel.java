@@ -10,6 +10,8 @@ import javax.swing.event.ListSelectionEvent;
 import org.apache.log4j.Logger;
 import silbersoft.uprint.dao.PrinterDao;
 import silbersoft.uprint.domain.Location;
+import silbersoft.uprint.ui.StatusBar;
+import silbersoft.uprint.utils.R;
 
 /**
  *
@@ -25,6 +27,12 @@ public class BuildingListModel implements PrintViewListModel {
     @Override
     public void buildList(String l) {
         log.debug("Getting Building List...");
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                StatusBar.setStatus(R.getString("status.text.getLocations"));
+            }                        
+        });
         locations = new ArrayList<Location>();
         log.debug("Entrys in the locations list = " + locations.size());
         locations = printerDao.getBuildings();
@@ -39,6 +47,7 @@ public class BuildingListModel implements PrintViewListModel {
                     log.debug("adding " + l.getName());
                     buildingListModel.addElement(l.getName());
                 }
+                StatusBar.setStatus(R.getString("status.text.ready"));
             }
         });
     }

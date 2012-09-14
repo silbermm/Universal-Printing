@@ -22,7 +22,7 @@ public class PrinterListModel implements PrintViewListModel {
     }
 
     @Override
-    public void buildList(final String l) {
+    public void buildList(final String l) {        
         final List<Printer> printers = printerDao.getPrintersByBuilding(l);
         SwingUtilities.invokeLater(new Runnable() {
             @Override

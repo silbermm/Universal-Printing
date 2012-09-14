@@ -6,17 +6,18 @@ import javax.swing.Action;
 import org.simoes.lpd.LPDServer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import silbersoft.uprint.ui.PrintView;
-import silbersoft.uprint.ui.PrintViewImpl;
-import silbersoft.uprint.ui.models.BuildingListModel;
-import silbersoft.uprint.ui.models.CancelButtonModel;
-import silbersoft.uprint.ui.models.PrintButtonModel;
-import silbersoft.uprint.ui.models.PrintViewListModel;
-import silbersoft.uprint.ui.models.PrinterListModel;
 import silbersoft.uprint.dao.PrinterDao;
 import silbersoft.uprint.dao.PrinterDaoImpl;
 import silbersoft.uprint.ui.MenuTestView;
+import silbersoft.uprint.ui.PrintView;
+import silbersoft.uprint.ui.PrintViewImpl;
 import silbersoft.uprint.ui.models.AboutUsModel;
+import silbersoft.uprint.ui.models.BuildingListModel;
+import silbersoft.uprint.ui.models.CancelButtonModel;
+import silbersoft.uprint.ui.models.GetHelpModel;
+import silbersoft.uprint.ui.models.PrintButtonModel;
+import silbersoft.uprint.ui.models.PrintViewListModel;
+import silbersoft.uprint.ui.models.PrinterListModel;
 
 /**
  *
@@ -51,6 +52,11 @@ public class AppContext {
     public Action aboutAction() {
         return new AboutUsModel();
     }
+    
+    @Bean
+    public Action getHelpAction(){
+        return new GetHelpModel();
+    }
 
     @Bean
     public PrintViewListModel printerListModel() {
@@ -72,6 +78,7 @@ public class AppContext {
         printFrame.setPrintModel(printAction());
         printFrame.setCancelModel(cancelAction());
         printFrame.setAboutModel(aboutAction());
+        printFrame.setGetHelpModel(getHelpAction());
         printFrame.setBuildingListModel(buildingListModel());
         printFrame.setPrinterListModel(printerListModel());
         return printFrame;
