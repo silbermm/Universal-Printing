@@ -72,15 +72,22 @@ public class PrintButtonModel extends AbstractAction {
     }
 
     public void setCurrentFile(String file) {
-        this.currentFile = file;
+        this.currentFile = file;        
     }
 
     public String getCurrentFile() {
         return this.currentFile;
     }
 
-    public void setJobName(String jobName) {
-        this.jobName = jobName;
+    public void setJobName(String job) {
+        this.jobName = job;
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run() {
+                StatusBar.setStatus("Ready to print " + jobName);
+            }
+        
+        });
     }
     private static Printer currentPrinter;
     private String currentFile;

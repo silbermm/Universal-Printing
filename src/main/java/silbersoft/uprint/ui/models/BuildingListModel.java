@@ -21,7 +21,7 @@ public class BuildingListModel implements PrintViewListModel {
 
     public BuildingListModel(PrintViewListModel printerListModel) {
         this.printerListModel = printerListModel;
-        buildingListModel = new DefaultListModel();        
+        buildingListModel = new DefaultListModel();
     }
 
     @Override
@@ -31,31 +31,42 @@ public class BuildingListModel implements PrintViewListModel {
             @Override
             public void run() {
                 StatusBar.setStatus(R.getString("status.text.getLocations"));
-            }                        
+            }
         });
         locations = new ArrayList<Location>();
         log.debug("Entrys in the locations list = " + locations.size());
         locations = printerDao.getBuildings();
         log.debug("Entrys in the locations list after call to printDao = " + locations.size());
-        Collections.sort(locations);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                log.debug("clearing the list");
-                buildingListModel.clear();
-                for (Location l : locations) {
-                    log.debug("adding " + l.getName());
-                    buildingListModel.addElement(l.getName());
+        if (locations.isEmpty()) {
+            SwingUtilities.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    StatusBar.setStatus(R.getString("status.text.noprinters"));
                 }
-                StatusBar.setStatus(R.getString("status.text.ready"));
-            }
-        });
+                
+            });
+        } else {
+            Collections.sort(locations);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    log.debug("clearing the list");
+                    buildingListModel.clear();
+                    for (Location l : locations) {
+                        log.debug("adding " + l.getName());
+                        buildingListModel.addElement(l.getName());
+                    }
+                    StatusBar.setStatus(R.getString("status.text.ready"));
+                }
+            });
+        }
     }
-    
+
     @Override
-    public void clearList(){
+    public void clearList() {
         printerDao.reset();
-        SwingUtilities.invokeLater(new Runnable(){
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 buildingListModel.clear();

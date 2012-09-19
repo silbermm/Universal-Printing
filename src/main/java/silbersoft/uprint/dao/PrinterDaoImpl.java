@@ -82,7 +82,6 @@ public class PrinterDaoImpl implements PrinterDao {
         } catch (SAXException ex) {
         } catch (IOException ex) {
         }
-        locations.add(new PrinterLocation("Test"));
         return locations;
     }
 

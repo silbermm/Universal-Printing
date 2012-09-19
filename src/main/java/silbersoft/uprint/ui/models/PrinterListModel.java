@@ -16,9 +16,9 @@ import silbersoft.uprint.domain.Printer;
 public class PrinterListModel implements PrintViewListModel {
 
     public PrinterListModel(PrintButtonModel printButtonModel) {
-        super();
+        super();        
         this.printButtonModel = printButtonModel;
-        printerListModel = new DefaultListModel();
+        printerListModel = new DefaultListModel();        
     }
 
     @Override

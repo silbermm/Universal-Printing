@@ -11,7 +11,6 @@ import com.jgoodies.looks.plastic.theme.ExperienceBlue;
 import com.typesafe.config.Config;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -58,17 +57,18 @@ public class PrintViewImpl implements PrintView {
     }
 
     private void buildFrame() {
-        FormLayout layout = new FormLayout("pref:grow, pref:grow", "pref, 4dlu, pref, pref:grow, pref,pref");
+        FormLayout layout = new FormLayout("pref:grow", "pref,4dlu,top:pref:grow,pref,bottom:pref");
         PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
-        builder.add(createTitlePanel(), cc.xyw(1, 1, 2));
-        builder.addSeparator("", cc.xyw(1, 2, 2));
-        builder.add(createListPanel(), cc.xyw(1, 3, 2));
-        builder.add(createButtonPanel(), cc.xy(2, 5));
-        builder.add(createStatusPanel(), cc.xyw(1,6, 2));
+        builder.add(createTitlePanel(), cc.xy(1, 1));
+        builder.addSeparator("", cc.xy(1, 2));
+        builder.add(createListPanel(), cc.xy(1, 3));
+        builder.add(createButtonPanel(), cc.xy(1, 5));
+        //builder.add(createStatusPanel(), cc.xy(1,6));
         mainFrame.add(builder.getPanel());
-        mainFrame.setJMenuBar(createMainMenu());
         
+        mainFrame.add(createStatusPanel(), BorderLayout.SOUTH);        
+        mainFrame.setJMenuBar(createMainMenu());        
     }
 
     @Override
@@ -124,20 +124,24 @@ public class PrintViewImpl implements PrintView {
      */
     private JComponent createListPanel() {
         JList printerList = new ZebraList(printerListModel.getListModel());
-        printerList.setCellRenderer(new PrinterCellRenderer());
+        printerList.setVisibleRowCount(10);
+        printerList.setFixedCellHeight(FONT_SIZE + 8);
+        printerList.setCellRenderer(new PrinterCellRenderer());        
         printerList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         printerList.addListSelectionListener(printerListModel);
         printerList.setFont(f);
         JScrollPane printerListScroll = new JScrollPane(printerList);
 
         JList buildingList = new ZebraList(buildingListModel.getListModel());
+        buildingList.setVisibleRowCount(10);
+        buildingList.setFixedCellHeight(FONT_SIZE + 8);
         buildingList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         buildingList.addListSelectionListener(buildingListModel);
         buildingList.setFont(f);
         JScrollPane buildingListScroll = new JScrollPane(buildingList);
         
         FormLayout layout = new FormLayout("pref:grow, 20dlu, pref:grow",   //columns
-                                           "8dlu, 4dlu, bottom:pref:grow"); //rows
+                                           "8dlu, 4dlu, top:pref:grow"); //rows
         layout.setColumnGroups(new int[][]{{1, 3}}); // make sure that columns 1 and 3 stay the same size       
         PanelBuilder builder = new PanelBuilder(layout);
         builder.setDefaultDialogBorder();
@@ -169,10 +173,10 @@ public class PrintViewImpl implements PrintView {
     
     private JComponent createStatusPanel() {
         StatusBar statusBar = new StatusBar();
-        FormLayout layout = new FormLayout("pref:grow", "25dlu");        
+        FormLayout layout = new FormLayout("pref:grow", "pref");        
         PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
-        builder.add(statusBar);
+        builder.add(statusBar, cc.xy(1,1));
         return builder.getPanel();        
     }
 

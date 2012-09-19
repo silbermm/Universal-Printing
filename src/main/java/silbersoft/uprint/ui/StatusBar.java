@@ -26,7 +26,7 @@ public class StatusBar extends JPanel {
         putClientProperty(Options.HEADER_STYLE_KEY,
                 HeaderStyle.BOTH);
         JPanel rightPanel = new JPanel(new BorderLayout());
-        rightPanel.add(new JLabel(new AngledLinesWindowsCornerIcon()), BorderLayout.SOUTH);
+        //rightPanel.add(new JLabel(new AngledLinesWindowsCornerIcon()), BorderLayout.SOUTH);
         rightPanel.setOpaque(false);
         add(rightPanel, BorderLayout.EAST);
         add(statusText, BorderLayout.WEST);
