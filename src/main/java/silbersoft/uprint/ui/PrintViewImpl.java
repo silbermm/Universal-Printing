@@ -47,13 +47,13 @@ public class PrintViewImpl implements PrintView {
         this.config = config;
         PlasticLookAndFeel laf = new PlasticXPLookAndFeel();
         PlasticLookAndFeel.setCurrentTheme(new ExperienceBlue());
-        if (!System.getProperty("os.name").startsWith("Mac")) {
+        //if (!System.getProperty("os.name").startsWith("Mac")) {
             try {
                 UIManager.setLookAndFeel(laf);
             } catch (UnsupportedLookAndFeelException e) {
                 log.debug("Unsupported Look and Feel");
             }
-        }
+        //}
     }
 
     private void buildFrame() {
@@ -64,9 +64,7 @@ public class PrintViewImpl implements PrintView {
         builder.addSeparator("", cc.xy(1, 2));
         builder.add(createListPanel(), cc.xy(1, 3));
         builder.add(createButtonPanel(), cc.xy(1, 5));
-        //builder.add(createStatusPanel(), cc.xy(1,6));
         mainFrame.add(builder.getPanel());
-        
         mainFrame.add(createStatusPanel(), BorderLayout.SOUTH);        
         mainFrame.setJMenuBar(createMainMenu());        
     }
@@ -131,7 +129,6 @@ public class PrintViewImpl implements PrintView {
         printerList.addListSelectionListener(printerListModel);
         printerList.setFont(f);
         JScrollPane printerListScroll = new JScrollPane(printerList);
-
         JList buildingList = new ZebraList(buildingListModel.getListModel());
         buildingList.setVisibleRowCount(10);
         buildingList.setFixedCellHeight(FONT_SIZE + 8);
@@ -150,7 +147,6 @@ public class PrintViewImpl implements PrintView {
         builder.add(buildingListScroll, cc.xy(1, 3));
         builder.addSeparator(R.getString("frame.printers.title"), cc.xy(3, 1));
         builder.add(printerListScroll, cc.xy(3, 3));
-
         return builder.getPanel();
     }
 
@@ -288,7 +284,7 @@ public class PrintViewImpl implements PrintView {
             @Override
             public void run() {
                 if (mainFrame.isDisplayable()) {
-                    mainFrame.dispose();
+                    mainFrame.dispose();		    	
                     mainFrame = null;
                 }
             }

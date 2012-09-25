@@ -95,6 +95,8 @@ public class BuildingListModel implements PrintViewListModel {
     public DefaultListModel getListModel() {
         return buildingListModel;
     }
+
+
     private static final Logger log = Logger.getLogger(BuildingListModel.class);
     private PrinterDao printerDao;
     private static List<Location> locations;

@@ -57,9 +57,9 @@ public class PrinterDaoImpl implements PrinterDao {
     @Override
     public List<Location> getBuildings() {
         List<Location> locations = new ArrayList<Location>();
-        if (xml == null) {
+        //if (xml == null) {
             xml = getXMLFromServer();
-        }
+        //}
         ByteArrayInputStream bs = new ByteArrayInputStream(xml.getBytes());
         try {
             Document doc = docBuilder.parse(bs);

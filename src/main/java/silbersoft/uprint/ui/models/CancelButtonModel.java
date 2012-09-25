@@ -19,6 +19,5 @@ public class CancelButtonModel extends AbstractAction {
     public void actionPerformed(ActionEvent ae) {
         // tell the PrintFrame to close... 
         PrintViewImpl.tearDown();
-    }
-    
+    }    
 }
