@@ -1,0 +1,10 @@
+uprint/target/
+.svn/
+uprint/cp.txt
+nbactions.xml
+uprint/uprint.conf
+.svn*
+.svn/*
+*/.svn
+*/.svn/*
+*.log
