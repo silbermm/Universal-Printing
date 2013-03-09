@@ -28,7 +28,7 @@ public class Main {
         //s.setDebug(true);        
 
         store = s.getStore("imaps");
-        store.connect("ucmail.uc.edu", 993, "silbermm", "Othello2!");
+        store.connect("ucmail.uc.edu", 993, "username", "password");
         folder = store.getFolder("INBOX");        
         folder.open(Folder.READ_WRITE);
         //Message message[] = folder.getMessages();
