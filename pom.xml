@@ -3,12 +3,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>edu.uc.labs</groupId>
+  <groupId>co.silbersoft.uprint</groupId>
   <version>1.0.2</version>
-  <artifactId>WirelessPrinting</artifactId>
+  <artifactId>UniversalPrinting</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>uprint</module>
-    <module>email2print</module> 
+    <module>uprint-agent</module>
+    <module>uprint-ui</module> 
+    <module>uprint-lib</module> 
   </modules>
 </project>

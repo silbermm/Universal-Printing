@@ -1,4 +1,7 @@
-uprint/target/
+uprint-agent/target/
+uprint-lib/target/
+uprint-web/target/
+uprint-ui/target/
 .svn/
 uprint/cp.txt
 nbactions.xml
@@ -8,3 +11,15 @@ uprint/uprint.conf
 */.svn
 */.svn/*
 *.log
+.classpath
+.project
+.settings/
+uprint-agent/.classpath
+uprint-agent/.project
+uuprint-lib/.classpath
+uprint-lib/.project
+uprint-lib/.settings/
+uprint-agent/.settings/
+uprint-ui/.classpath
+uprint-ui/.project
+uprint-ui/.settings/
