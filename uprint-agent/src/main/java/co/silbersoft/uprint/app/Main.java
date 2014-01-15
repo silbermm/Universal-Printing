@@ -17,11 +17,6 @@ import org.apache.log4j.Logger;
 import org.simoes.lpd.LPDServer;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
-
-import akka.actor.ActorRef;
-import akka.actor.ActorSystem;
-import akka.actor.Props;
-import co.silbersoft.uprint.actors.ClientCommandActor;
 import co.silbersoft.uprint.lib.utils.R;
 
 /**
@@ -37,9 +32,12 @@ public class Main {
         AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(AppContext.class);
         ctx.registerShutdownHook();
                 
-        //if (cmd.hasOption("daemon")) {        	
-            LPDServer lpd = ctx.getBean(LPDServer.class);
-            lpd.start();            
+        //if (cmd.hasOption("daemon")) {
+        
+        LPDServer lpd = ctx.getBean(LPDServer.class);
+        lpd.start(); 
+        	
+        
         //}
         /*else if(cmd.hasOption("f")) {
         	/*

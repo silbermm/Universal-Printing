@@ -1,6 +1,8 @@
 package co.silbersoft.uprint.ui.app;
 
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.actor.Props;
 import co.silbersoft.uprint.ui.*;
 import co.silbersoft.uprint.ui.actors.WakeUpPrinter;
 import co.silbersoft.uprint.ui.dao.*;
@@ -93,6 +95,13 @@ public class AppContext {
     	return ActorSystem.create("uprint-ui");
     }
       
+    @Bean
+    public ActorRef wakeUpActor() {
+    	ActorRef actorRef = actorSystem().actorOf(WakeUpPrinter.props(actorSystem()), "wakeup");
+    	return actorRef;
+    }
+    
+    
 
     
 }

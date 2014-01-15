@@ -14,6 +14,7 @@ import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import co.silbersoft.uprint.actors.ClientCommandActor;
+import co.silbersoft.uprint.app.UniversalPrinterSettings;
 import co.silbersoft.uprint.lib.domain.PrintResult;
 
 import com.typesafe.config.Config;
@@ -26,11 +27,11 @@ public class UCITHandler implements HandlerInterface {
 
     static Logger log = Logger.getLogger(UCITHandler.class);
 
-    public UCITHandler(Config config, ActorSystem actorSystem) {
-        super();
-        this.config = config;
+    public UCITHandler(UniversalPrinterSettings printerSettings, ActorSystem actorSystem) {
+        super();    
+        this.printerSettings = printerSettings;      
         this.actorSystem = actorSystem;
-        this.actorSelection = actorSystem.actorSelection("akka.tcp://uprint-ui@127.0.0.1:5150/user/wakeup");
+        this.config = printerSettings.getConfig();                
     }
 
     /**
@@ -58,21 +59,23 @@ public class UCITHandler implements HandlerInterface {
             // create file name, pjb == print job
             String unique = UUID.randomUUID().toString();
             String name = unique + "." + printJob.getControlFile().getJobNumber() + ".pjb";
-            File fileName = new File(CREATE_DIR.getAbsolutePath() + File.separator + name);            
+            File fileName = new File(CREATE_DIR.getAbsolutePath() + File.separator + name);           
+            ActorSelection aSelection = actorSystem.actorSelection(printerSettings.getActorPath());            
             try {
                 FileUtil.writeFile(printJob.getDataFile().getContents(), fileName.getAbsolutePath());                
                 result = true;
-                PrintResult pResult = new PrintResult(fileName, null);
-                actorSelection.tell(pResult, ActorRef.noSender());
+                PrintResult pResult = new PrintResult(fileName, null);  
+                aSelection.tell(pResult);
             } catch (IOException e) {
                 log.error(METHOD_NAME + e.getMessage());
                 PrintResult pResult = new PrintResult(null, e.getMessage());
-                actorSelection.tell(pResult, ActorRef.noSender());
-                return result;
+                aSelection.tell(pResult);
             }
-            log.debug("setting filename in the printButtonModel to " + fileName.getAbsolutePath());
             
             
+            
+            
+            //log.debug("setting filename in the printButtonModel to " + fileName.getAbsolutePath());                        
             /*printButton.setCurrentFile(fileName.getAbsolutePath());
             try {
                 printButton.setJobName(URLEncoder.encode(printJob.getName(), "UTF-16LE"));
@@ -93,7 +96,7 @@ public class UCITHandler implements HandlerInterface {
     }
     
     private Config config;
-    final String JOB_DIR = "/jobs/";
     private final ActorSystem actorSystem;
-    private final ActorSelection actorSelection;
+    private UniversalPrinterSettings printerSettings;
+    final String JOB_DIR = "/jobs/";
 }

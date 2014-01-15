@@ -5,6 +5,7 @@
 package org.simoes.lpd;
 
 import akka.actor.ActorSystem;
+import co.silbersoft.uprint.app.UniversalPrinterSettings;
 
 import com.typesafe.config.Config;
 
@@ -24,8 +25,9 @@ public class LPDServer {
     static Logger log = Logger.getLogger(LPD.class);
         
     
-    public LPDServer(Config config, ActorSystem actorSystem){
-        this.config = config;
+    public LPDServer(UniversalPrinterSettings printerSettings, ActorSystem actorSystem){
+    	this.printerSettings = printerSettings;
+        this.config = printerSettings.getConfig();
         this.actorSystem = actorSystem;
     }
 
@@ -46,7 +48,7 @@ public class LPDServer {
             lpdThread.start();
 
             // Setup the QueueMontior to process the rawQueue
-            QueueMonitor rawQueueMonitor = new QueueMonitor(rawQueueName, config, actorSystem);
+            QueueMonitor rawQueueMonitor = new QueueMonitor(rawQueueName, printerSettings, actorSystem);
             Thread rawQueueMonitorThread = new Thread(rawQueueMonitor);
             rawQueueMonitorThread.start();
 
@@ -56,7 +58,8 @@ public class LPDServer {
         log.debug("LPDServer(): FINSHED");
     }    
      
-    private Config config;  
+    private UniversalPrinterSettings printerSettings; 
+    private Config config;
     private ActorSystem actorSystem;
 
 }

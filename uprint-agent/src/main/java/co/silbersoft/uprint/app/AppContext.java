@@ -1,5 +1,6 @@
 package co.silbersoft.uprint.app;
 
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import co.silbersoft.uprint.actors.ClientCommandActor;
 
@@ -23,14 +24,18 @@ public class AppContext {
 	
     @Bean
     public Config config() {
-        return ConfigFactory.load();
-    }           
+        return ConfigFactory.load().withFallback(ConfigFactory.systemProperties());
+    }   
+    
+    @Bean
+    public UniversalPrinterSettings universalPrinterSettings() {
+    	return new UniversalPrinterSettings(config());
+    }
+    
+    
     
     @Bean LPDServer lpdServer(){
-        LPDServer lpd = new LPDServer(config(), actorSystem());
-        //lpd.setBuildingList(buildingListModel());
-        //lpd.setPrintButtonModel(printAction());
-        //lpd.setPrintView(printFrame());
+        LPDServer lpd = new LPDServer(universalPrinterSettings(), actorSystem());
         return lpd;
     }
     
@@ -40,6 +45,11 @@ public class AppContext {
     @Bean
     public ActorSystem actorSystem() {
     	return ActorSystem.create("uprint-agent");
+    }
+    
+    @Bean
+    public ActorRef clientCommandActor() {
+    	return actorSystem().actorOf(ClientCommandActor.props(universalPrinterSettings()), "printSettings");
     }
     
 }

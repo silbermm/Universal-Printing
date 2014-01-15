@@ -1,6 +1,7 @@
 package org.simoes.lpd.handler;
 
 import akka.actor.ActorSystem;
+import co.silbersoft.uprint.app.UniversalPrinterSettings;
 import co.silbersoft.uprint.service.UCITHandler;
 
 import com.typesafe.config.Config;
@@ -21,7 +22,7 @@ public class HandlerFactory {
 
 	private final static HandlerFactory INSTANCE = new HandlerFactory();
 	private String handler;
-    private static Config config;
+    private static UniversalPrinterSettings printerSettings;
 	private static ActorSystem actorSystem;
     
 	/**
@@ -43,8 +44,8 @@ public class HandlerFactory {
 	 * This class is a singleton.  
 	 * @return the only instance of HandlerFactory
 	 */
-	public static HandlerFactory getInstance(Config config, ActorSystem actorSystem) {
-                HandlerFactory.config = config; 
+	public static HandlerFactory getInstance(UniversalPrinterSettings printerSettings, ActorSystem actorSystem) {
+                HandlerFactory.printerSettings = printerSettings; 
                 HandlerFactory.actorSystem = actorSystem;
 		return INSTANCE;
 	}
@@ -67,7 +68,7 @@ public class HandlerFactory {
 			log.error(METHOD_NAME + "No Handler implemented yet for:" + Constants.VALUE_DATABASE);
                 } else if("UCIT".equals(handler.trim())) {
                         log.debug(METHOD_NAME + "Chose the UCIT Handler");
-                        result = new UCITHandler(config, actorSystem);
+                        result = new UCITHandler(printerSettings, actorSystem);
                 } else { // if some how it did not get set then default is FILE
 			log.error(METHOD_NAME + "The handler is not set.");
 			log.error(METHOD_NAME + "Using the default of: " + Constants.VALUE_FILE);

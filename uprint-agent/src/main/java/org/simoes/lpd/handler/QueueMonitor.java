@@ -1,6 +1,7 @@
 package org.simoes.lpd.handler;
 
 import akka.actor.ActorSystem;
+import co.silbersoft.uprint.app.UniversalPrinterSettings;
 
 import com.typesafe.config.Config;
 
@@ -30,12 +31,12 @@ public class QueueMonitor implements Runnable{
 	 * Create a QueueMonitor.
 	 * @param queueName the queue we will be monitoring.
 	 */
-	public QueueMonitor(String queueName, Config config, ActorSystem actorSystem) throws QueueException {
+	public QueueMonitor(String queueName, UniversalPrinterSettings printerSettings, ActorSystem actorSystem) throws QueueException {
 		super();
 		run = true;
 		name = queueName;
 		queueLock = Queues.getInstance().getQueueLock(queueName);
-		handlerFactory = HandlerFactory.getInstance(config, actorSystem); 
+		handlerFactory = HandlerFactory.getInstance(printerSettings, actorSystem); 
 	}
 	
 	public void stop() {

@@ -15,8 +15,12 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 
 import akka.actor.ActorRef;
+import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
+import akka.actor.Address;
 import akka.actor.Props;
+import co.silbersoft.uprint.lib.domain.PrintResult;
+import co.silbersoft.uprint.lib.domain.PrintUIConfig;
 import co.silbersoft.uprint.lib.utils.R;
 import co.silbersoft.uprint.ui.actors.WakeUpPrinter;
 
@@ -30,9 +34,7 @@ public class App {
 		AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(AppContext.class);
 		ctx.registerShutdownHook();
 		
-		ActorSystem actorSystem = ctx.getBean(ActorSystem.class);
-		
-		ActorRef actorRef = actorSystem.actorOf(Props.create(WakeUpPrinter.class), "wakeup");
+		ActorSystem actorSystem = ctx.getBean(ActorSystem.class);		
 		log.debug("waiting for a message!");
 		
 	}
