@@ -97,7 +97,7 @@ public class AppContext {
       
     @Bean
     public ActorRef wakeUpActor() {
-    	ActorRef actorRef = actorSystem().actorOf(WakeUpPrinter.props(actorSystem()), "wakeup");
+    	ActorRef actorRef = actorSystem().actorOf(WakeUpPrinter.props(actorSystem(), printAction(), printFrame(),buildingListModel()), "wakeup");
     	return actorRef;
     }
     
