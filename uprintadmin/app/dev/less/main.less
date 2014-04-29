@@ -1,0 +1,22 @@
+@import "bootstrap.less";
+@import "font-awesome.less";
+@import "uprint-variables.less";
+
+// Fix FontAwesome font path
+@fa-font-path:   "../fonts";
+
+[ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+   display: none !important;
+}
+
+body {
+	padding-top: @headerPadding;
+}
+
+footer {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	height: @headerPadding;
+	background-color: @gray-lighter;
+}

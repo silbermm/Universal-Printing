@@ -1,0 +1,25 @@
+{
+  "name": "uprintadmin",
+  "version": "2.0.0",
+  "authors": [
+    "Matt Silbernagel <silbermm@ucmail.uc.edu>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "font-awesome": "~4.0.3",
+    "bootstrap": "~3.1.1",
+    "angular-ui-bootstrap-bower": "~0.10.0",
+    "angular-ui-router": "~0.2.10"
+  }
+}

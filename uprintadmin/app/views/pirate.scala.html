@@ -1,0 +1,27 @@
+@main("Welcome to Play") {
+
+    <h1>Pirate badge</h1>
+    
+    <div class="widgets">
+       	<div>
+    		<input type="text" id="inputName" maxlength="15">
+  		</div>
+  		<div>
+    		<button id="generateButton">Aye! Gimme a name!</button>
+  		</div>
+    </div>
+    <div class="badge">
+      <div class="greeting">
+        Arrr! Me name is
+      </div>
+      <div class="name">
+        <span id="badgeName"> </span>
+      </div>
+    </div>
+
+    
+
+    <script src="@routes.Assets.at("dart/packages/shadow_dom/shadow_dom.min.js")"></script>
+    <script type="application/dart" src="@routes.Assets.at("dart/pirate.dart")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("dart/packages/browser/dart.js")"></script>
+}

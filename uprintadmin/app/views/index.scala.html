@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html ng-app="uprintadmin" ng-controller="AppCtrl">
+  <head>
+    <title> {{pageTitle}}</title>
+    <meta name="viewport" content="width-device-width, user-scalable=no" />
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/main.css")">
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("img/favicon.png")">       
+  </head>
+  <body ng-cloak>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">        
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#uprint-menu">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"> Universal Printing </a>
+        </div>
+
+
+
+        <div class="collapse navbar-collapse" id="uprint-menu">
+          <ul class="nav navbar-nav">
+            <li ng-class="{active: state.includes('printers') }"> <a ui-sref="printers"> <i class="fa fa-print"></i> @Messages("links.printer") </a></li>
+            <li ng-class="{active: state.includes('downloads') }"><a ui-sref="downloads"> <i class="fa fa-download"></i> @Messages("links.downloads") </a></li>
+            <li><a href="#"> <i class="fa fa-book"></i> @Messages("links.docs") </a> </li>
+            <li><a href="#"> <i class="fa fa-bullhorn"></i> @Messages("links.feedback") </a></li>
+          </ul>          
+          <ul class="nav navbar-nav navbar-right">     
+            <li> <a ui-sref="login"> <i class="fa fa-lock"></i> @Messages("links.login") </a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->  
+    </nav>
+
+    <div class="container">      
+      <div ui-view="main"></div>
+    </div>
+
+    <footer>
+      <div class="container">
+        <p class="text-muted"> &copy; {{copyrightDate | date: 'yyyy'}} </p>
+      </div>
+    </footer>
+
+    <script type="text/javascript" src="@routes.Assets.at("js/common.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("js/templates.js")"></script>
+    <input type="hidden" id="basedir" val="@routes.Assets.at("")" />
+  </body>
+</html>
