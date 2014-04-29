@@ -2,20 +2,9 @@ package co.silbersoft.uprint.actors;
 
 import org.apache.log4j.Logger;
 
-import com.typesafe.config.Config;
-
-import co.silbersoft.uprint.app.UniversalPrinterSettings;
-import co.silbersoft.uprint.lib.domain.PrintJob;
-import co.silbersoft.uprint.lib.domain.PrintUIConfig;
-import akka.actor.ActorPath;
-import akka.actor.ActorRef;
-import akka.actor.ActorSelection;
-import akka.actor.ActorSystem;
-import akka.actor.Address;
-import akka.actor.AddressFromURIString;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
-import akka.remote.RemoteActorRef;
+import co.silbersoft.uprint.app.UniversalPrinterSettings;
 
 public class ClientCommandActor extends UntypedActor {
 	
@@ -30,8 +19,13 @@ public class ClientCommandActor extends UntypedActor {
 	
 	
 	@Override
-	public void onReceive(Object message) throws Exception {									
-		printerSettings.setActorPath(this.context().sender().path());
+	public void onReceive(Object message) throws Exception {		
+		if(message instanceof String){
+			String user = (String) message;
+			printerSettings.addUserPath(user, this.context().sender().path());			
+		} else {
+			log.debug("message recieved but not a string");
+		}
 	}
 	
 	private UniversalPrinterSettings printerSettings;

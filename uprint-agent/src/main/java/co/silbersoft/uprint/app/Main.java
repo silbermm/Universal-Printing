@@ -31,31 +31,9 @@ public class Main {
        
         AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(AppContext.class);
         ctx.registerShutdownHook();
-                
-        //if (cmd.hasOption("daemon")) {
         
         LPDServer lpd = ctx.getBean(LPDServer.class);
-        lpd.start(); 
-        	
-        
-        //}
-        /*else if(cmd.hasOption("f")) {
-        	/*
-            PrintButtonModel pBtn = ctx.getBean(PrintButtonModel.class);
-            pBtn.setCurrentFile(cmd.getOptionValue("f"));
-            PrintView printView = ctx.getBean(PrintView.class);
-            printView.showFrame();
-            BuildingListModel buildings = ctx.getBean(BuildingListModel.class);
-            buildings.buildList("all");
-            */
-        //} else {
-            // for now we will only run the program if f or daemon is passed
-            //MenuTestView m = ctx.getBean(MenuTestView.class);
-            //m.showFrame();
-        //    System.out.println("You must specify either the -f or --daemon options");
-        //    printHelp();
-        // }
-        
+        lpd.start();         	 
     }
 
     @SuppressWarnings("static-access")

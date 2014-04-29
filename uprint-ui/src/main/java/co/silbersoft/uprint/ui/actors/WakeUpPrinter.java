@@ -8,6 +8,7 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import co.silbersoft.uprint.lib.domain.PrintResult;
+import co.silbersoft.uprint.lib.utils.PrintUtils;
 import co.silbersoft.uprint.ui.PrintView;
 import co.silbersoft.uprint.ui.models.BuildingListModel;
 import co.silbersoft.uprint.ui.models.PrintButtonModel;
@@ -25,26 +26,27 @@ public class WakeUpPrinter extends UntypedActor {
 		this.printView = printView;
 		this.buildingList = buildingList;
 		ActorSelection actorSelection = actorSystem.actorSelection("akka.tcp://uprint-agent@127.0.0.1:2552/user/printSettings");
-		actorSelection.tell(1, getSelf());		
+		actorSelection.tell(System.getProperty("user.name"), getSelf());		
 	}
-	
-	
+
 	@Override
 	public void onReceive(Object message) throws Exception {
 		if(message instanceof PrintResult) {
 			PrintResult pj = (PrintResult) message; 
-			log.debug("recieved Message! " + pj.getFile().getAbsolutePath());
-			
-			
+			log.debug("recieved Message! " + pj.getFile().getAbsolutePath());						
 			printButton.setCurrentFile(pj.getFile().getAbsolutePath());
 			printView.showFrame();
-			buildingList.buildList("all");
-			
-			
+			buildingList.buildList("all");						
+		} else if(message instanceof Integer) {
+			log.debug("recieved an Integer Message");
+			int msg = (Integer) message;
+			if (PrintUtils.WAKE_UP == msg){
+				ActorSelection actorSelection = actorSystem.actorSelection("akka.tcp://uprint-agent@127.0.0.1:2552/user/printSettings");
+				actorSelection.tell(System.getProperty("user.name"), getSelf());		
+			}
 		} else {
 			log.debug("recieved Message, but not of PrintResult :(");
 		}
-
 	}
 
 	private final ActorSystem actorSystem;
